@@ -10,43 +10,45 @@ import UIKit
 class ViewController: UIViewController {
     
     let buttonResset = UIButton(type: .system)
-    let buttonOnImageArray = [UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system), UIButton(type: .system)]
-    let imageArray = [UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView(), UIImageView()]
+    var buttonOnImageArray:[UIButton] = []
+    var imageArray:[UIImageView] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
     }
     
-    @objc func pressedImegeButton(_ sender:UIButton){
+    @objc func pressedImegeButton(_ sender:UIButton) {
         
-        if imageArray[sender.tag].backgroundColor == UIColor(named: "myColor"){
+        if imageArray[sender.tag].backgroundColor == UIColor(named: "myColor") {
             imageArray[sender.tag].backgroundColor = .darkGray
-        }else if imageArray[sender.tag].backgroundColor == .darkGray{
+        } else if imageArray[sender.tag].backgroundColor == .darkGray {
             imageArray[sender.tag].backgroundColor = .systemTeal
-        }else{
+        } else {
             imageArray[sender.tag].backgroundColor = .systemOrange
         }
-        
-        
+  
     }
     
     
     
-    @objc func pressedResetButton(){
+    @objc func pressedResetButton() {
+        buttonOnImageArray = []
+        imageArray = []
         setUI()
     }
     
-    func setUI(){
-        
+    func setUI() {
         let side = (view.frame.width / 3) - (40 / 3)
+
         view.backgroundColor = .systemOrange
         
-        for image in imageArray{
+        for _ in 0..<12 {
+            let image = UIImageView()
             image.backgroundColor = UIColor(named: "myColor")
+            imageArray.append(image)
             view.addSubview(image)
         }
-        
 
         imageArray[0].frame = CGRect(x: 10, y: view.frame.height / 6 - 60 , width: side, height: side)
 
@@ -72,7 +74,6 @@ class ViewController: UIViewController {
 
         imageArray[11].frame = CGRect(x: 30 + side * 2, y: view.frame.height / 6 - 60 + 3 * side + 30, width: side, height: side)
         
-        
         view.addSubview(buttonResset)
         buttonResset.frame = CGRect(x: 10, y: view.frame.height / 6 - 60 + 4 * side + 40, width: view.frame.width - 20, height: side)
         buttonResset.backgroundColor = .systemPurple
@@ -81,19 +82,15 @@ class ViewController: UIViewController {
         buttonResset.titleLabel?.font = .systemFont(ofSize: 30)
         buttonResset.addTarget(nil, action: #selector(pressedResetButton), for: .touchUpInside)
         
-        func createButton(index: Int){
-            view.addSubview(buttonOnImageArray[index])
+        for index in 0..<12 {
+            let button = UIButton(type: .system)
+            button.addTarget(nil, action: #selector(pressedImegeButton), for: .touchUpInside)
+            button.tag = index
+            buttonOnImageArray.append(button)
+            view.addSubview(button)
             buttonOnImageArray[index].frame = imageArray[index].frame
-            buttonOnImageArray[index].tag = 0
-            buttonOnImageArray[index].addTarget(nil, action: #selector(pressedImegeButton), for: .touchUpInside)
         }
-        
-        for index in buttonOnImageArray.indices{
-            view.addSubview(buttonOnImageArray[index])
-            buttonOnImageArray[index].frame = imageArray[index].frame
-            buttonOnImageArray[index].tag = index
-            buttonOnImageArray[index].addTarget(nil, action: #selector(pressedImegeButton), for: .touchUpInside)
-        }
+
     }
 }
 
